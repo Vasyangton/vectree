@@ -1,0 +1,719 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: 'BerlingskeSerif';
+  src: url("../fonts/BerlingskeSerif/regular.woff") format("woff"), url("../fonts/BerlingskeSerif/regular.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BerlingskeSerif';
+  src: url("../fonts/BerlingskeSerif/medium.woff") format("woff"), url("../fonts/BerlingskeSerif/medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TTNorms';
+  src: url("../fonts/TTNorms/regular.woff") format("woff"), url("../fonts/TTNorms/regular.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+}
+
+.map-wrap {
+  width: 100%;
+  max-height: 860px;
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  text-align: center;
+}
+
+.map-wrap-svg {
+  max-height: 100vh;
+  height: 860px;
+}
+
+.map-wrap-land {
+  -webkit-transition: fill .2s ease;
+  -o-transition: fill .2s ease;
+  transition: fill .2s ease;
+}
+
+.map-wrap-land.sland {
+  cursor: pointer;
+}
+
+.map-wrap-land.-sold {
+  pointer-events: none;
+}
+
+.map-wrap-land.-sold > path,
+.map-wrap-land.-sold > polygon,
+.map-wrap-land.-sold > rect {
+  stroke: #CFDCE5;
+  fill: #fff;
+}
+
+.map-wrap-land.-sold g path,
+.map-wrap-land.-sold g polygon {
+  fill: #B7BFC4;
+}
+
+.map-wrap-land.-sold:hover {
+  cursor: default;
+}
+
+.map-wrap-land.-sale > path,
+.map-wrap-land.-sale > polygon,
+.map-wrap-land.-sale > rect {
+  stroke: #81A9CA;
+  fill: #D3E0F2;
+  -webkit-transition: fill .2s ease;
+  -o-transition: fill .2s ease;
+  transition: fill .2s ease;
+}
+
+.map-wrap-land.-sale g path,
+.map-wrap-land.-sale g polygon {
+  fill: #6a88a0;
+}
+
+.map-wrap-land.-booked > path,
+.map-wrap-land.-booked > polygon,
+.map-wrap-land.-booked > rect {
+  stroke: #C1A37C;
+  fill: #f2e2cb;
+  -webkit-transition: fill .2s ease;
+  -o-transition: fill .2s ease;
+  transition: fill .2s ease;
+}
+
+.map-wrap-land.-booked g path,
+.map-wrap-land.-booked g polygon {
+  fill: #B2936D;
+}
+
+.map-wrap-land.-stock > path,
+.map-wrap-land.-stock > polygon,
+.map-wrap-land.-stock > rect {
+  stroke: #f29e88;
+  fill: #ffe3dc;
+  -webkit-transition: fill .2s ease;
+  -o-transition: fill .2s ease;
+  transition: fill .2s ease;
+}
+
+.map-wrap-land.-stock g path,
+.map-wrap-land.-stock g polygon {
+  fill: #f29e88;
+}
+
+.mtooltip {
+  font-family: 'TTNorms';
+  position: fixed;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: #4D4D4D;
+  -webkit-transform: translate(-50%, -165%);
+      -ms-transform: translate(-50%, -165%);
+          transform: translate(-50%, -165%);
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+  -o-transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+  text-align: left;
+}
+
+.mtooltip__close {
+  display: none;
+  position: absolute;
+  top: 30px;
+  right: 27px;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.mtooltip__wrap {
+  overflow: hidden;
+  padding: 30px 27px;
+  min-width: 244px;
+}
+
+.mtooltip__wrap:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  bottom: -7.5px;
+  margin: auto;
+  z-index: 2;
+  width: 15px;
+  height: 15px;
+}
+
+.mtooltip.-show {
+  opacity: 1;
+  left: 0;
+  top: 0;
+  -webkit-transform: translate(-50%, -110%);
+      -ms-transform: translate(-50%, -110%);
+          transform: translate(-50%, -110%);
+  visibility: visible;
+  -webkit-transition: opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+  -o-transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+}
+
+.mtooltip.-sale .mtooltip__wrap {
+  background: #D3E0F2;
+  border: 1px solid #81A9CA;
+}
+
+.mtooltip.-sale .mtooltip__wrap:after {
+  content: "";
+  background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='15px' height='15px' viewBox='0 0 15 15' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E%3Ctitle%3EUnion%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cdefs%3E%3Cpolygon id='path-1' points='7.07108 0 14.1422 7.07107 7.07108 14.1421 1.5378e-05 7.07107'%3E%3C/polygon%3E%3C/defs%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='Union'%3E%3Cpolygon id='Shape' fill='%23D3E0F2' fill-rule='nonzero' points='7.07108 0 14.1422 7.07107 7.07108 14.1421 1.5378e-05 7.07107'%3E%3C/polygon%3E%3Cg id='Clipped'%3E%3Cmask id='mask-2' fill='white'%3E%3Cuse xlink:href='%23path-1'%3E%3C/use%3E%3C/mask%3E%3Cg id='Shape'%3E%3C/g%3E%3Cpath d='M7.07108,0 L7.77819,-0.707107 L7.07108,-1.41421 L6.36398,-0.707107 L7.07108,0 Z M14.1422,7.07107 L14.8493,7.77817 L15.5564,7.07107 L14.8493,6.36396 L14.1422,7.07107 Z M7.07108,14.1421 L6.36398,14.8492 L7.07108,15.5563 L7.77819,14.8492 L7.07108,14.1421 Z M1.52588e-05,7.07107 L-0.707092,6.36396 L-1.4142,7.07107 L-0.707092,7.77817 L1.52588e-05,7.07107 Z M13.435,6.36396 L6.36398,13.435 L7.77819,14.8492 L14.8493,7.77817 L13.435,6.36396 Z M7.77819,13.435 L0.707122,6.36396 L-0.707092,7.77817 L6.36398,14.8492 L7.77819,13.435 Z M-0.999986,5.071067 L6.071082,-1.999996 L4.656872,-3.41421 L-2.4142,3.656857 L-0.999986,5.071067 Z' id='Shape' fill='%2381A9CA' fill-rule='nonzero' mask='url(%23mask-2)'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.mtooltip.-sale .mtooltip__num {
+  color: #79A3C6;
+}
+
+.mtooltip.-sale .mtooltip__ground {
+  border-bottom: 1px solid #81A9CA;
+}
+
+.mtooltip.-booked .mtooltip__wrap {
+  background: #F2E2CB;
+  border: 1px solid #C3AB8A;
+}
+
+.mtooltip.-booked .mtooltip__wrap:before {
+  content: "забронировано";
+  font-family: 'BerlingskeSerif';
+  z-index: 3;
+  font-size: 39px;
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  line-height: 0.5;
+  color: rgba(195, 171, 138, 0.3);
+}
+
+.mtooltip.-booked .mtooltip__wrap:after {
+  content: "";
+  background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='15px' height='15px' viewBox='0 0 15 15' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E%3Ctitle%3EUnion%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cdefs%3E%3Cpolygon id='path-1' points='7.07108 0 14.1422 7.07107 7.07108 14.1421 1.5378e-05 7.07107'%3E%3C/polygon%3E%3C/defs%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='Union'%3E%3Cpolygon id='Shape' fill='%23F2E2CB' fill-rule='nonzero' points='7.07108 0 14.1422 7.07107 7.07108 14.1421 1.5378e-05 7.07107'%3E%3C/polygon%3E%3Cg id='Clipped'%3E%3Cmask id='mask-2' fill='white'%3E%3Cuse xlink:href='%23path-1'%3E%3C/use%3E%3C/mask%3E%3Cg id='Shape'%3E%3C/g%3E%3Cpath d='M7.07108,0 L7.77819,-0.707107 L7.07108,-1.41421 L6.36398,-0.707107 L7.07108,0 Z M14.1422,7.07107 L14.8493,7.77817 L15.5564,7.07107 L14.8493,6.36396 L14.1422,7.07107 Z M7.07108,14.1421 L6.36398,14.8492 L7.07108,15.5563 L7.77819,14.8492 L7.07108,14.1421 Z M1.52588e-05,7.07107 L-0.707092,6.36396 L-1.4142,7.07107 L-0.707092,7.77817 L1.52588e-05,7.07107 Z M13.435,6.36396 L6.36398,13.435 L7.77819,14.8492 L14.8493,7.77817 L13.435,6.36396 Z M7.77819,13.435 L0.707122,6.36396 L-0.707092,7.77817 L6.36398,14.8492 L7.77819,13.435 Z M-0.999986,5.071067 L6.071082,-1.999996 L4.656872,-3.41421 L-2.4142,3.656857 L-0.999986,5.071067 Z' id='Shape' fill='%23C3AB8A' fill-rule='nonzero' mask='url(%23mask-2)'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.mtooltip.-booked .mtooltip__wrap .mtooltip__num {
+  color: #C3AB8A;
+}
+
+.mtooltip.-booked .mtooltip__wrap .mtooltip__ground {
+  border-bottom: 1px solid #C3AB8A;
+}
+
+.mtooltip.-stock .mtooltip__wrap {
+  background: #ffe3dc;
+  border: 1px solid #f29e88;
+}
+
+.mtooltip.-stock .mtooltip__wrap:after {
+  content: "";
+  background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='15px' height='15px' viewBox='0 0 15 15' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E%3Ctitle%3EUnion%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cdefs%3E%3Cpolygon id='path-1' points='7.07108 0 14.1422 7.07107 7.07108 14.1421 1.5378e-05 7.07107'%3E%3C/polygon%3E%3C/defs%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='Union'%3E%3Cpolygon id='Shape' fill='%23FFE3DC' fill-rule='nonzero' points='7.07108 0 14.1422 7.07107 7.07108 14.1421 1.5378e-05 7.07107'%3E%3C/polygon%3E%3Cg id='Clipped'%3E%3Cmask id='mask-2' fill='white'%3E%3Cuse xlink:href='%23path-1'%3E%3C/use%3E%3C/mask%3E%3Cg id='Shape'%3E%3C/g%3E%3Cpath d='M7.07108,0 L7.77819,-0.707107 L7.07108,-1.41421 L6.36398,-0.707107 L7.07108,0 Z M14.1422,7.07107 L14.8493,7.77817 L15.5564,7.07107 L14.8493,6.36396 L14.1422,7.07107 Z M7.07108,14.1421 L6.36398,14.8492 L7.07108,15.5563 L7.77819,14.8492 L7.07108,14.1421 Z M1.52588e-05,7.07107 L-0.707092,6.36396 L-1.4142,7.07107 L-0.707092,7.77817 L1.52588e-05,7.07107 Z M13.435,6.36396 L6.36398,13.435 L7.77819,14.8492 L14.8493,7.77817 L13.435,6.36396 Z M7.77819,13.435 L0.707122,6.36396 L-0.707092,7.77817 L6.36398,14.8492 L7.77819,13.435 Z M-0.999986,5.071067 L6.071082,-1.999996 L4.656872,-3.41421 L-2.4142,3.656857 L-0.999986,5.071067 Z' id='Shape' fill='%23F29E88' fill-rule='nonzero' mask='url(%23mask-2)'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.mtooltip.-stock .mtooltip__wrap .mtooltip__num {
+  color: #f29e88;
+}
+
+.mtooltip.-stock .mtooltip__wrap .mtooltip__ground {
+  border-bottom: 1px solid #f29e88;
+}
+
+.mtooltip__status {
+  display: none;
+}
+
+.mtooltip__num {
+  font-family: 'BerlingskeSerif';
+  font-size: 20px;
+  line-height: 1;
+}
+
+.mtooltip__ground {
+  font-size: 16px;
+  line-height: 1;
+  padding-bottom: 24px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #4D4D4D;
+}
+
+.mtooltip__number {
+  font-size: 39px;
+  padding-left: 6px;
+}
+
+.mtooltip__square {
+  position: relative;
+}
+
+.mtooltip__square-text {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.mtooltip__square-text sup {
+  font-size: 10px;
+}
+
+.sectooltip {
+  font-family: 'TTNorms';
+  position: fixed;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: #4D4D4D;
+  -webkit-transform: translate(-50%, -160%);
+      -ms-transform: translate(-50%, -160%);
+          transform: translate(-50%, -160%);
+  margin-left: 7.5px;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+  -o-transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+  visibility: hidden;
+  text-align: left;
+}
+
+.sectooltip__close {
+  display: none;
+  position: absolute;
+  top: 30px;
+  right: 27px;
+  border: none;
+  outline: none;
+  z-index: 2;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  background: white;
+}
+
+.sectooltip__close:active,
+.sectooltip__close:hover,
+.sectooltip__close:focus,
+.sectooltip__close:visited {
+  text-decoration: none;
+  color: #4d4d4d;
+}
+
+.sectooltip__wrap {
+  overflow: hidden;
+  padding: 0 0 25px;
+  min-width: 300px;
+  background: white;
+  border: 1px solid #e5e9ea;
+}
+
+.sectooltip__wrap:after,
+.sectooltip__wrap:before {
+  content: '';
+  border: solid transparent;
+  position: absolute;
+  left: 50%;
+  margin-left: -14px;
+  bottom: -15px;
+  width: 0;
+}
+
+.sectooltip__wrap:before {
+  border-top-color: #e5e9ea;
+  border-width: 8px;
+}
+
+.sectooltip__wrap:after {
+  border-top-color: white;
+  border-width: 9px;
+  margin-left: -15px;
+}
+
+.sectooltip__photo {
+  width: 100%;
+  height: 180px;
+  position: relative;
+  background-size: cover;
+  background-position: 50%;
+  margin-bottom: 25px;
+  background-repeat: no-repeat;
+}
+
+.sectooltip__icon {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  bottom: -25px;
+  left: 27px;
+  background: white;
+  border-radius: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.sectooltip__icon-ic {
+  height: 30px;
+}
+
+.sectooltip__text {
+  padding: 0 27px;
+}
+
+.sectooltip.-show {
+  opacity: 1;
+  -webkit-transform: translate(-50%, -110%);
+      -ms-transform: translate(-50%, -110%);
+          transform: translate(-50%, -110%);
+  visibility: visible;
+  -webkit-transition: opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+  -o-transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, -webkit-transform 0.3s ease;
+}
+
+.sectooltip.-park .sectooltip__wrap,
+.sectooltip.-figure .sectooltip__wrap {
+  border: 1px solid #6fb280;
+}
+
+.sectooltip.-park .sectooltip__wrap:before,
+.sectooltip.-figure .sectooltip__wrap:before {
+  border-top-color: #6fb280;
+}
+
+.sectooltip.-parking .sectooltip__icon-ic {
+  height: 26px;
+  position: relative;
+  left: 2px;
+}
+
+.sectooltip.-parking .sectooltip__wrap {
+  border: 1px solid #6fb3e2;
+}
+
+.sectooltip.-parking .sectooltip__wrap:before {
+  border-top-color: #6fb3e2;
+}
+
+.sectooltip.-playground .sectooltip__wrap {
+  border: 1px solid #eabf54;
+}
+
+.sectooltip.-playground .sectooltip__wrap:before {
+  border-top-color: #eabf54;
+}
+
+.sectooltip.-azs .sectooltip__wrap {
+  border: 1px solid #f29c3d;
+}
+
+.sectooltip.-azs .sectooltip__wrap:before {
+  border-top-color: #f29c3d;
+}
+
+.sectooltip.-basketball .sectooltip__wrap,
+.sectooltip.-hockey .sectooltip__wrap,
+.sectooltip.-tennis .sectooltip__wrap,
+.sectooltip.-valleyball .sectooltip__wrap {
+  border: 1px solid #c1a37c;
+}
+
+.sectooltip.-basketball .sectooltip__wrap:before,
+.sectooltip.-hockey .sectooltip__wrap:before,
+.sectooltip.-tennis .sectooltip__wrap:before,
+.sectooltip.-valleyball .sectooltip__wrap:before {
+  border-top-color: #c1a37c;
+}
+
+.sectooltip.-rivera .sectooltip__icon-ic {
+  height: 22px;
+}
+
+.sectooltip.-rivera .sectooltip__wrap {
+  border: 1px solid #c1a37c;
+}
+
+.sectooltip.-rivera .sectooltip__wrap:before {
+  border-top-color: #c1a37c;
+}
+
+.sectooltip.-restaurant .sectooltip__icon-ic {
+  height: 26px;
+}
+
+.sectooltip.-restaurant .sectooltip__wrap {
+  border: 1px solid #bf415d;
+}
+
+.sectooltip.-restaurant .sectooltip__wrap:before {
+  border-top-color: #bf415d;
+}
+
+.sectooltip.-swimming .sectooltip__icon-ic {
+  height: 22px;
+}
+
+.sectooltip.-swimming .sectooltip__wrap {
+  border: 1px solid #aac7e2;
+}
+
+.sectooltip.-swimming .sectooltip__wrap:before {
+  border-top-color: #aac7e2;
+}
+
+@media (min-width: 1024px) {
+  .map-wrap-land.-sale:hover {
+    cursor: pointer;
+  }
+
+  .map-wrap-land.-sale:hover > path,
+  .map-wrap-land.-sale:hover > polygon,
+  .map-wrap-land.-sale:hover > rect {
+    fill: #79A3C6;
+    -webkit-transition: fill .2s ease;
+    -o-transition: fill .2s ease;
+    transition: fill .2s ease;
+  }
+
+  .map-wrap-land.-sale:hover g path,
+  .map-wrap-land.-sale:hover g polygon {
+    fill: white;
+  }
+
+  .map-wrap-land.-booked:hover {
+    cursor: pointer;
+  }
+
+  .map-wrap-land.-booked:hover > path,
+  .map-wrap-land.-booked:hover > polygon,
+  .map-wrap-land.-booked:hover > rect {
+    fill: #DDBF9B;
+    -webkit-transition: fill .2s ease;
+    -o-transition: fill .2s ease;
+    transition: fill .2s ease;
+  }
+
+  .map-wrap-land.-booked:hover g path,
+  .map-wrap-land.-booked:hover g polygon {
+    fill: white;
+  }
+
+  .map-wrap-land.-stock:hover {
+    cursor: pointer;
+  }
+
+  .map-wrap-land.-stock:hover > path,
+  .map-wrap-land.-stock:hover > polygon,
+  .map-wrap-land.-stock:hover > rect {
+    fill: #f6beb0;
+    -webkit-transition: fill .2s ease;
+    -o-transition: fill .2s ease;
+    transition: fill .2s ease;
+  }
+
+  .map-wrap-land.-stock:hover g path,
+  .map-wrap-land.-stock:hover g polygon {
+    fill: white;
+  }
+}
+
+@media (max-width: 1024px) {
+  .map-wrap {
+    max-height: inherit;
+  }
+
+  .map-wrap-svg {
+    max-height: inherit;
+    height: auto;
+    width: 100%;
+  }
+
+  .map-wrap-land.-sale.-active > path,
+  .map-wrap-land.-sale.-active > polygon,
+  .map-wrap-land.-sale.-active > rect {
+    fill: #79A3C6;
+    -webkit-transition: fill .2s ease;
+    -o-transition: fill .2s ease;
+    transition: fill .2s ease;
+  }
+
+  .map-wrap-land.-sale.-active g path,
+  .map-wrap-land.-sale.-active g polygon {
+    fill: white;
+  }
+
+  .map-wrap-land.-booked.-active > path,
+  .map-wrap-land.-booked.-active > polygon,
+  .map-wrap-land.-booked.-active > rect {
+    fill: #DDBF9B;
+    -webkit-transition: fill .2s ease;
+    -o-transition: fill .2s ease;
+    transition: fill .2s ease;
+  }
+
+  .map-wrap-land.-booked.-active g path,
+  .map-wrap-land.-booked.-active g polygon {
+    fill: white;
+  }
+
+  .map-wrap-land.-stock.-active > path,
+  .map-wrap-land.-stock.-active > polygon,
+  .map-wrap-land.-stock.-active > rect {
+    fill: #f6beb0;
+    -webkit-transition: fill .2s ease;
+    -o-transition: fill .2s ease;
+    transition: fill .2s ease;
+  }
+
+  .map-wrap-land.-stock.-active g path,
+  .map-wrap-land.-stock.-active g polygon {
+    fill: white;
+  }
+
+  .mtooltip {
+    position: absolute;
+    -webkit-transform: translate(0%, 20%);
+        -ms-transform: translate(0%, 20%);
+            transform: translate(0%, 20%);
+  }
+
+  .mtooltip__close {
+    display: block;
+  }
+
+  .mtooltip__close:after {
+    content: "\00d7";
+    color: #4d4d4d;
+    text-decoration: none;
+    font-size: 24px;
+    font-family: 'TTNorms';
+  }
+
+  .mtooltip__wrap {
+    min-width: 140px;
+  }
+
+  .mtooltip__wrap:after {
+    display: none;
+  }
+
+  .mtooltip.-show {
+    -webkit-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+            transform: translate(0, 0);
+    right: 0;
+    left: 0;
+    top: auto;
+    bottom: 0;
+  }
+
+  .sectooltip {
+    -webkit-transform: translate(0, 20%);
+        -ms-transform: translate(0, 20%);
+            transform: translate(0, 20%);
+    position: absolute;
+    margin-left: 0;
+  }
+
+  .sectooltip__close {
+    display: block;
+  }
+
+  .sectooltip__close:after {
+    content: "\00d7";
+    display: block;
+    color: #4d4d4d;
+    text-decoration: none;
+    font-size: 24px;
+    position: relative;
+    top: -3px;
+    font-family: 'TTNorms';
+  }
+
+  .sectooltip__wrap {
+    min-width: 160px;
+  }
+
+  .sectooltip__wrap:after,
+  .sectooltip__wrap:before {
+    display: none;
+  }
+
+  .sectooltip__photo {
+    height: 120px;
+  }
+
+  .sectooltip.-show {
+    -webkit-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+            transform: translate(0, 0);
+    right: 0;
+    left: 0;
+    top: auto;
+    bottom: 0;
+  }
+
+  .sectooltip.-park .sectooltip__wrap,
+  .sectooltip.-figure .sectooltip__wrap {
+    border: 1px solid white;
+  }
+
+  .sectooltip.-parking .sectooltip__wrap {
+    border: 1px solid white;
+  }
+
+  .sectooltip.-playground .sectooltip__wrap {
+    border: 1px solid white;
+  }
+
+  .sectooltip.-azs .sectooltip__wrap {
+    border: 1px solid white;
+  }
+
+  .sectooltip.-basketball .sectooltip__wrap,
+  .sectooltip.-hockey .sectooltip__wrap,
+  .sectooltip.-tennis .sectooltip__wrap,
+  .sectooltip.-valleyball .sectooltip__wrap {
+    border: 1px solid white;
+  }
+
+  .sectooltip.-rivera .sectooltip__wrap {
+    border: 1px solid white;
+  }
+
+  .sectooltip.-restaurant .sectooltip__wrap {
+    border: 1px solid white;
+  }
+
+  .sectooltip.-swimming .sectooltip__wrap {
+    border: 1px solid white;
+  }
+}
